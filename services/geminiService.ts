@@ -27,7 +27,7 @@ export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-    this.ai = new GoogleGenAI({ apiKey: "AIzaSyB6qOy4PP7tXHL8DnL1m2qZunjmM7x8Fvs" });
+    this.ai = new GoogleGenAI({ apiKey: "AIzaSyB2tpkYgymEms-XIIMMj9AUW-5QpPkqU58" });
   }
 
   async sendMessage(message: string, history: ChatMessage[]) {
