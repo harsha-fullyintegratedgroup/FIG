@@ -2,28 +2,36 @@ import { GoogleGenAI } from "@google/genai";
 import { ChatMessage } from "../types";
 
 const SYSTEM_INSTRUCTION = `
-You are the Fully Integrated Digital Strategist, a senior business consultant at Fully Integrated Group.
-Your goal is to provide high-level, professional, and actionable business advice.
-Be concise but insightful. 
-If asked about specific services, emphasize that Fully Integrated Group offers:
-1. MSME Business Consulting (Strategic growth, capital access, and operational advice)
-2. Go-To-Market Strategy (Market entry and product launches)
-3. Process Consultation (Workflow optimization and efficiency)
+You are the FIG Strategist, a senior level management consultant at Fully Integrated Group. 
+Your goal is to provide high-level, data-driven, and implementation-ready business advice.
 
-Maintain a sophisticated, helpful, and objective tone.
+CONTEXT:
+The Fully Integrated Group specializes in:
+1. MSME Business Consulting: Scaling, capital advisory, and operational resilience.
+2. Go-To-Market (GTM): Launching products/brands with precision.
+3. Process Consultation: Efficiency, automation, and workflow re-engineering.
+
+CONVERSATION STYLE:
+- Sophisticated, objective, and authoritative.
+- Avoid generic fluff; provide concrete metrics or strategic frameworks where possible.
+- When presented with a structured business profile (Onboarding Data), use that context to tailor your advice specifically to that industry and goal.
+
+MANDATORY SECTIONS FOR INITIAL STRATEGY:
+When the user finishes the onboarding and presents their core problem, always include:
+- Strategic Diagnostic
+- Implementation Cost Range (estimated professional fees or resource costs)
+- Expected ROI & Strategic Milestones
 `;
 
 export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-    // Correctly initialize with a named parameter using the process.env.API_KEY directly.
     this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   }
 
   async sendMessage(message: string, history: ChatMessage[]) {
     try {
-      // Use ai.models.generateContent to query GenAI with the model name and prompt history.
       const response = await this.ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: [
@@ -35,17 +43,16 @@ export class GeminiService {
         ],
         config: {
           systemInstruction: SYSTEM_INSTRUCTION,
-          temperature: 0.7,
-          topP: 0.8,
+          temperature: 0.65,
+          topP: 0.9,
           topK: 40,
         },
       });
 
-      // Directly access the .text property from the response object.
       return response.text;
     } catch (error) {
       console.error("Gemini API Error:", error);
-      throw new Error("I'm currently recalibrating my strategic models. Please try again in a moment.");
+      throw new Error("My strategic processors are temporarily offline. Please refresh and try again.");
     }
   }
 }

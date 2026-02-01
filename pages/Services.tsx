@@ -13,7 +13,11 @@ const Services: React.FC = () => {
 
         <div className="space-y-32">
           {SERVICES.map((service, index) => (
-            <div key={service.id} className={`flex flex-col md:flex-row gap-16 items-center ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
+            <div 
+              key={service.id} 
+              id={service.id} 
+              className={`flex flex-col md:flex-row gap-16 items-center scroll-mt-32 ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
+            >
               <div className="flex-1 space-y-6">
                 <div className="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-600/20">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
