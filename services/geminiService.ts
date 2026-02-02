@@ -22,12 +22,13 @@ When the user finishes the onboarding and presents their core problem, always in
 - Implementation Cost Range (estimated professional fees or resource costs)
 - Expected ROI & Strategic Milestones
 `;
+const APIKEY: string = "AIzaSyAn9ef2zi3QwL_Og8LxC3l8J1KmZtLz8ss";
 
 export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    this.ai = new GoogleGenAI({ apiKey: APIKEY });
   }
 
   async sendMessage(message: string, history: ChatMessage[]) {
