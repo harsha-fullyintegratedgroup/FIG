@@ -25,9 +25,10 @@ When the user finishes the onboarding and presents their core problem, always in
 
 export class GeminiService {
   private ai: GoogleGenAI;
+  const APIKEY: string = "AIzaSyAn9ef2zi3QwL_Og8LxC3l8J1KmZtLz8ss";
 
   constructor() {
-    this.ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    this.ai = new GoogleGenAI({ apiKey: APIKEY });
   }
 
   async sendMessage(message: string, history: ChatMessage[]) {
