@@ -18,18 +18,17 @@ CONVERSATION STYLE:
 MANDATORY SECTIONS FOR INITIAL STRATEGY:
 When the user finishes the onboarding and presents their core problem, always include:
 - Strategic Diagnostic
-- Implementation Cost Range (estimated professional fees or resource costs)
+- Implementation Cost Range
 - Expected ROI & Strategic Milestones
 `;
 
 export default async function handler(req: any, res: any) {
-  // Allow only POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    // Parse body safely (Vercel may pass stringified JSON)
+    // Safe body parsing (Vercel compatible)
     const body =
       typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
@@ -39,54 +38,43 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: "Message is required" });
     }
 
-    // Ensure API key exists
     if (!process.env.GEMINI_API_KEY) {
       console.error("❌ GEMINI_API_KEY missing");
       return res.status(500).json({ error: "Server configuration error" });
     }
 
-    // Initialize Gemini (stable SDK)
-    const genAI = new GoogleGenAI(process.env.GEMINI_API_KEY);
-
-    const model = genAI.getGenerativeModel({
-      model: "gemini-3-flash-preview",
-      systemInstruction: SYSTEM_INSTRUCTION,
+    // ✅ Correct usage for @google/genai
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
     });
 
-    // Build conversation context
-    const contents = [
-      ...(Array.isArray(history)
-        ? history.map((m: any) => ({
-            role: m.role,
-            parts: [{ text: m.text }],
-          }))
-        : []),
-      {
-        role: "user",
-        parts: [{ text: message }],
-      },
-    ];
-
-    // Generate response
-    const result = await model.generateContent({
-      contents,
-      generationConfig: {
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: [
+        ...(Array.isArray(history)
+          ? history.map((m: any) => ({
+              role: m.role,
+              parts: [{ text: m.text }],
+            }))
+          : []),
+        {
+          role: "user",
+          parts: [{ text: message }],
+        },
+      ],
+      config: {
+        systemInstruction: SYSTEM_INSTRUCTION,
         temperature: 0.65,
         topP: 0.9,
         topK: 40,
       },
     });
 
-    const text = result?.response?.text();
-
-    if (!text) {
-      throw new Error("Empty response from Gemini");
-    }
-
-    return res.status(200).json({ text });
+    return res.status(200).json({
+      text: response.text,
+    });
   } catch (error: any) {
-    console.error("🔥 Gemini API Error:", error?.message || error);
-
+    console.error("🔥 Gemini API Error:", error);
     return res.status(500).json({
       error:
         "My strategic processors are temporarily offline. Please refresh and try again.",
