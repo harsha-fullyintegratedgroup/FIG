@@ -18,7 +18,7 @@ export default async function handler(
 
     if (!process.env.RESEND_API_KEY) {
       console.error("RESEND_API_KEY missing");
-      return res.status(500).json({ error: "Server misconfigured" });
+      return res.status(500).json({ error: "Server config error" });
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY);
@@ -39,7 +39,7 @@ export default async function handler(
 
     return res.status(200).json({ success: true });
   } catch (error) {
-    console.error("Email send error:", error);
+    console.error("Send email error:", error);
     return res.status(500).json({ error: "Failed to send email" });
   }
 }
