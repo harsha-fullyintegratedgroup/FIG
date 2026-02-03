@@ -1,8 +1,7 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const SYSTEM_INSTRUCTION = `
-You are the FIG Strategist, a senior level management consultant at Fully Integrated Group. 
-Your goal is to provide high-level, data-driven, and implementation-ready business advice.
+You are the FIG Strategist, a senior level management consultant at Fully Integrated Group.
 
 CONTEXT:
 The Fully Integrated Group specializes in:
@@ -16,9 +15,8 @@ CONVERSATION STYLE:
 - When presented with a structured business profile (Onboarding Data), use that context to tailor your advice specifically to that industry and goal.
 
 MANDATORY SECTIONS FOR INITIAL STRATEGY:
-When the user finishes the onboarding and presents their core problem, always include:
 - Strategic Diagnostic
-- Implementation Cost Range
+- Implementation Cost Range (estimated professional fees or resource costs)
 - Expected ROI & Strategic Milestones
 `;
 
@@ -28,7 +26,6 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    // Safe body parsing (Vercel compatible)
     const body =
       typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
@@ -39,42 +36,49 @@ export default async function handler(req: any, res: any) {
     }
 
     if (!process.env.GEMINI_API_KEY) {
-      console.error("❌ GEMINI_API_KEY missing");
-      return res.status(500).json({ error: "Server configuration error" });
+      return res.status(500).json({ error: "GEMINI_API_KEY missing" });
     }
 
-    // ✅ Correct usage for @google/genai
-    const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction: SYSTEM_INSTRUCTION,
     });
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: [
-        ...(Array.isArray(history)
-          ? history.map((m: any) => ({
-              role: m.role,
-              parts: [{ text: m.text }],
-            }))
-          : []),
-        {
-          role: "user",
-          parts: [{ text: message }],
-        },
-      ],
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
+    const contents = [
+      ...(Array.isArray(history)
+        ? history.map((m: any) => ({
+            role: m.role,
+            parts: [{ text: m.text }],
+          }))
+        : []),
+      { role: "user", parts: [{ text: message }] },
+    ];
+
+    const result = await model.generateContent({
+      contents,
+      generationConfig: {
         temperature: 0.65,
         topP: 0.9,
         topK: 40,
       },
     });
 
-    return res.status(200).json({
-      text: response.text,
-    });
-  } catch (error: any) {
-    console.error("🔥 Gemini API Error:", error);
+    const text = result?.response?.text();
+    if (!text) throw new Error("Empty response from Gemini");
+
+    return res.status(200).json({ text });
+  } catch (err: any) {
+    // Graceful quota handling
+    if (err?.status === 429) {
+      return res.status(429).json({
+        error:
+          "AI usage limit reached. Please try again later or contact support.",
+      });
+    }
+
+    console.error("Gemini error:", err);
     return res.status(500).json({
       error:
         "My strategic processors are temporarily offline. Please refresh and try again.",
