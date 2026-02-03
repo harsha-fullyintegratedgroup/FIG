@@ -206,12 +206,12 @@ INSTRUCTIONS:
           field: 'service' as keyof OnboardingData,
           opts: ['MSME Business Consulting', 'Go to market strategy', 'Process consulting', 'Other'],
           next: 4 as OnboardingStep,
-          q: 'What is your primary goal to achieve?',
+          q: 'What is your problem domain?',
         };
       case 4:
         return {
           field: 'goal' as keyof OnboardingData,
-          opts: ['Growth', 'Cost Optimisation', 'Compliance', 'Fundraising', 'Other'],
+          opts: ['Finance', 'Operations', 'Marketing', 'Compliance', 'IT', 'Other'],
           next: 5 as OnboardingStep,
           q: 'Please provide your email id:',
         };
