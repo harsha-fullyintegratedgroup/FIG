@@ -27,7 +27,7 @@ const Contact: React.FC = () => {
     setError("");
 
     try {
-      const res = await fetch("/api/send-email", {
+      const res = await fetch("pages/api/send-email/route.ts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
