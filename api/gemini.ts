@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
 const SYSTEM_INSTRUCTION = `
 You are the FIG Strategist, a senior level management consultant at Fully Integrated Group. 
@@ -46,10 +46,10 @@ export default async function handler(req: any, res: any) {
     }
 
     // Initialize Gemini (stable SDK)
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const genAI = new GoogleGenAI(process.env.GEMINI_API_KEY);
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-3-flash-preview",
       systemInstruction: SYSTEM_INSTRUCTION,
     });
 
