@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "@google/genai";
 
 const SYSTEM_INSTRUCTION = `
 You are the FIG Strategist, a senior level management consultant at Fully Integrated Group. 
