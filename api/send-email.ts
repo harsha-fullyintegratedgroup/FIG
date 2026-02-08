@@ -15,7 +15,7 @@ export default async function handler(req: any, res: any) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
-      from: "info@fullyintegratedgroup.com",
+      from: "Onboarding@fullyintegratedgroup.com",
       to: ["info@fullyintegratedgroup.com"],
       replyTo: email,
       subject: `New FIG Inquiry — ${service}`,
