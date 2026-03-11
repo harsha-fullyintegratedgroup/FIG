@@ -10,7 +10,7 @@ import GTMStrategy from './pages/services/GTMStrategy';
 import ProcessConsulting from './pages/services/ProcessConsulting';
 import DigitalSolutions from './pages/services/DigitalSolutions';
 import Contact from './pages/Contact';
-import QuickConsult from './pages/QuickConsult';
+// import QuickConsult from './pages/QuickConsult';
 
 // Industry Pages
 import Manufacturing from './pages/industries/Manufacturing';
@@ -45,7 +45,7 @@ const App: React.FC = () => {
             <Route path="/industries/hospitality" element={<Hospitality />} />
             
             <Route path="/contact" element={<Contact />} />
-            <Route path="/quick-consult" element={<QuickConsult />} />
+            {/* <Route path="/quick-consult" element={<QuickConsult />} /> */}
           </Routes>
         </main>
         <Footer />
