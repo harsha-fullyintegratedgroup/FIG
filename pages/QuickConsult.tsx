@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { geminiService } from '../services/geminiService';
 import { ChatMessage } from '../types';
 import { INDUSTRIES } from '../constants';
 
@@ -15,13 +16,8 @@ interface OnboardingData {
 
 const QuickConsult: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      role: 'model',
-      text:
-        'Welcome to the FIG Strategy Lab. To provide the most accurate strategic insight, I have a few quick questions.\n\nTo what industry scope does your business belong?',
-    },
+    { role: 'model', text: 'Welcome to the FIG Strategy Lab. To provide the most accurate strategic insight, I have a few quick questions. \n\nTo what industry scope does your business belong?' }
   ]);
-
   const [step, setStep] = useState<OnboardingStep>(1);
   const [data, setData] = useState<OnboardingData>({
     industry: '',
@@ -29,19 +25,19 @@ const QuickConsult: React.FC = () => {
     service: '',
     goal: '',
     email: '',
-    problem: '',
+    problem: ''
   });
-
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  /* -------------------- Scroll Handling -------------------- */
+  // Improved scroll handling
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) {
+      const scrollHeight = scrollRef.current.scrollHeight;
       scrollRef.current.scrollTo({
-        top: scrollRef.current.scrollHeight,
-        behavior: 'smooth',
+        top: scrollHeight,
+        behavior: 'smooth'
       });
     }
   }, []);
@@ -50,22 +46,17 @@ const QuickConsult: React.FC = () => {
     scrollToBottom();
   }, [messages, isLoading, step, scrollToBottom]);
 
-  /* -------------------- Helpers -------------------- */
   const addMessage = (role: 'user' | 'model', text: string) => {
     setMessages(prev => [...prev, { role, text }]);
   };
 
-  const handleSelection = (
-    field: keyof OnboardingData,
-    value: string,
-    nextStep: OnboardingStep,
-    nextQuestion?: string
-  ) => {
+  const handleSelection = (field: keyof OnboardingData, value: string, nextStep: OnboardingStep, nextQuestion?: string) => {
     addMessage('user', value);
     setData(prev => ({ ...prev, [field]: value }));
-
+    
     if (value === 'Other') {
-      addMessage('model', `Please specify your ${field}:`);
+      const label = field === 'industry' ? 'industry scope' : field === 'subIndustry' ? 'industry' : field === 'service' ? 'service' : 'goal';
+      addMessage('model', `Please specify your ${label}:`);
     } else {
       setStep(nextStep);
       if (nextQuestion) {
@@ -74,24 +65,6 @@ const QuickConsult: React.FC = () => {
     }
   };
 
-  /* -------------------- Gemini API Call -------------------- */
-  const callGemini = async (prompt: string) => {
-    const res = await fetch('/api/gemini', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: prompt,
-        history: messages,
-      }),
-    });
-
-    if (!res.ok) throw new Error('Gemini request failed');
-
-    const data = await res.json();
-    return data.text as string;
-  };
-
-  /* -------------------- Main Send Handler -------------------- */
   const handleSend = async () => {
     const trimmedInput = input.trim();
     if (!trimmedInput || isLoading) return;
@@ -99,121 +72,127 @@ const QuickConsult: React.FC = () => {
     setInput('');
     addMessage('user', trimmedInput);
 
-    /* Handle “Other” flows */
+    // Handle "Other" inputs for various steps
     if (step === 1 && data.industry === 'Other') {
-      setData(p => ({ ...p, industry: trimmedInput }));
+      setData(prev => ({ ...prev, industry: trimmedInput }));
       setStep(2);
       addMessage('model', 'What specific industry within that scope does your business belong to?');
       return;
     }
-
+    
     if (step === 2 && data.subIndustry === 'Other') {
-      setData(p => ({ ...p, subIndustry: trimmedInput }));
+      setData(prev => ({ ...prev, subIndustry: trimmedInput }));
       setStep(3);
       addMessage('model', 'What service are you looking for?');
       return;
     }
 
     if (step === 3 && data.service === 'Other') {
-      setData(p => ({ ...p, service: trimmedInput }));
+      setData(prev => ({ ...prev, service: trimmedInput }));
       setStep(4);
       addMessage('model', 'What is your primary goal to achieve?');
       return;
     }
 
     if (step === 4 && data.goal === 'Other') {
-      setData(p => ({ ...p, goal: trimmedInput }));
+      setData(prev => ({ ...prev, goal: trimmedInput }));
       setStep(5);
       addMessage('model', 'Please provide your email address for our records:');
       return;
     }
 
+    // Handle standard text steps
     if (step === 5) {
-      setData(p => ({ ...p, email: trimmedInput }));
+      setData(prev => ({ ...prev, email: trimmedInput }));
       setStep(6);
-      addMessage('model', 'Please describe your business problem in detail.');
+      addMessage('model', 'Please describe your specific business problem or challenge in detail.');
       return;
     }
 
-    /* Final onboarding step → Gemini */
     if (step === 6) {
-      setData(p => ({ ...p, problem: trimmedInput }));
+      setData(prev => ({ ...prev, problem: trimmedInput }));
       setIsLoading(true);
-
       try {
         const fullContext = `
-The user has completed onboarding:
-- Industry Scope: ${data.industry}
-- Industry: ${data.subIndustry}
-- Service: ${data.service}
-- Goal: ${data.goal}
-- Email: ${data.email}
-
-PROBLEM TO SOLVE:
-"${trimmedInput}"
-
-INSTRUCTIONS:
-- Strategic Diagnostic
-- Implementation Cost Range
-- Expected ROI & Strategic Milestones
-`;
-
-        const response = await callGemini(fullContext);
-        addMessage('model', response);
+          The user has completed the onboarding flow:
+          - Scope: ${data.industry}
+          - Industry: ${data.subIndustry}
+          - Service: ${data.service}
+          - Goal: ${data.goal}
+          - Email: ${data.email}
+          
+          THE PROBLEM TO SOLVE: "${trimmedInput}"
+          
+          INSTRUCTIONS:
+          1. Provide a senior-level strategic diagnostic of the problem.
+          2. Explicitly include a section for "Implementation Cost Estimate".
+          3. Explicitly include a section for "Expected ROI & Strategic Value".
+          
+          Respond in a professional, concise, yet highly authoritative tone.
+        `;
+        const response = await geminiService.sendMessage(fullContext, messages);
+        addMessage('model', response || '');
         setStep('completed');
-      } catch {
-        addMessage('model', 'Strategic engine error. Please try again.');
+      } catch (error) {
+        addMessage('model', "I encountered a strategic processing error. Please re-state your problem.");
       } finally {
         setIsLoading(false);
       }
       return;
     }
 
-    /* Normal chat after completion */
+    // Standard chat after completion
     if (step === 'completed') {
       setIsLoading(true);
       try {
-        const response = await callGemini(trimmedInput);
-        addMessage('model', response);
-      } catch {
-        addMessage('model', 'Unable to process that request right now.');
+        const response = await geminiService.sendMessage(trimmedInput, messages);
+        addMessage('model', response || '');
+      } catch (error) {
+        addMessage('model', "I'm having trouble processing that inquiry. Let's try again.");
       } finally {
         setIsLoading(false);
       }
     }
   };
 
-  /* -------------------- Options Resolver -------------------- */
   const getOptionsForStep = () => {
-    switch (step) {
+    switch(step) {
       case 1:
-        return {
-          field: 'industry' as keyof OnboardingData,
-          opts: [...INDUSTRIES.map(i => i.name), 'Other'],
-          next: 2 as OnboardingStep,
-          q: 'What specific industry does your business belong to?',
+        return { 
+          field: 'industry' as keyof OnboardingData, 
+          opts: [...INDUSTRIES.map(i => i.name), 'Other'], 
+          next: 2 as OnboardingStep, 
+          q: 'What specific industry does your business belong to?' 
         };
       case 2:
         const industry = INDUSTRIES.find(i => i.name === data.industry);
-        return {
-          field: 'subIndustry' as keyof OnboardingData,
-          opts: industry ? [...industry.subIndustries.map(s => s.name), 'Other'] : ['Other'],
-          next: 3 as OnboardingStep,
-          q: 'What service are you looking for?',
+        return { 
+          field: 'subIndustry' as keyof OnboardingData, 
+          opts: industry ? [...industry.subIndustries.map(s => s.name), 'Other'] : ['Other'], 
+          next: 3 as OnboardingStep, 
+          q: 'What service are you looking for?' 
         };
       case 3:
-        return {
-          field: 'service' as keyof OnboardingData,
-          opts: ['MSME Business Consulting', 'Go to market strategy', 'Process consulting', 'Other'],
-          next: 4 as OnboardingStep,
-          q: 'What is your problem domain?',
+        return { 
+          field: 'service' as keyof OnboardingData, 
+          opts: ['MSME Business Consulting', 'Go to market strategy', 'Process consulting', 'Other'], 
+          next: 4 as OnboardingStep, 
+          q: 'What is your primary goal to achieve?' 
         };
       case 4:
-        return {
-          field: 'goal' as keyof OnboardingData,
-          opts: ['Finance', 'Operations', 'Marketing', 'Compliance', 'IT', 'Other'],
-          next: 5 as OnboardingStep,
-          q: 'Please provide your email id:',
+        let goals: string[] = [];
+        if (data.service === 'MSME Business Consulting') {
+          goals = ['Entity Structuring & Regulatory Readiness', 'Income Tax Compliance', 'GST Management', 'Investor-Ready Pitch Deck', 'Compliance & Governance'];
+        } else if (data.service === 'Go to market strategy') {
+          goals = ['Market Segmentation', 'Value Proposition Framework', 'Pricing Strategy', 'Launch Roadmap', 'Risk Assessment'];
+        } else if (data.service === 'Process consulting') {
+          goals = ['Process Diagnostics', 'Standardization Frameworks', 'Operating Model Design', 'Capacity Analysis', 'Executive Blueprint'];
+        }
+        return { 
+          field: 'goal' as keyof OnboardingData, 
+          opts: [...goals, 'Other'], 
+          next: 5 as OnboardingStep, 
+          q: 'Please provide your email id:' 
         };
       default:
         return null;
@@ -231,8 +210,7 @@ INSTRUCTIONS:
     }
   };
 
-  /* -------------------- UI -------------------- */
-return (
+  return (
     <div className="animate-fadeIn h-[calc(100vh-5rem)] bg-[#0f0f0f] flex flex-col text-white overflow-hidden font-sans">
       {/* Containerized Chat */}
       <div className="shrink-0 max-w-4xl mx-auto w-full px-6 pt-10 pb-4 text-center space-y-1">
@@ -319,4 +297,5 @@ return (
     </div>
   );
 };
+
 export default QuickConsult;

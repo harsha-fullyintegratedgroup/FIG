@@ -65,7 +65,8 @@ const Home: React.FC = () => {
   const servicePaths: Record<string, string> = {
     'msme-funding': '/services/msme',
     'gtm-strategy': '/services/gtm',
-    'process-consultation': '/services/process'
+    'process-consultation': '/services/process',
+    'digital-solutions': '/services/digital'
   };
 
   return (
@@ -121,16 +122,15 @@ const Home: React.FC = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center">
             <h2 className="text-xl md:text-2xl font-normal text-white/80 uppercase tracking-[0.3em]">
-              Quick Consult
+              Coming Soon
             </h2>
           </div>
 
           <div 
-            className="relative group cursor-pointer" 
-            onClick={() => navigate('/quick-consult')}
+            className="relative group cursor-not-allowed opacity-60" 
           >
             {/* Glass style search bar - Completely Rounded */}
-            <div className="flex items-center w-full bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full px-8 py-5 shadow-2xl transition-all group-hover:border-emerald-500/30 group-hover:bg-white/10">
+            <div className="flex items-center w-full bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full px-8 py-5 shadow-2xl transition-all">
               {/* White Magnifying Glass Icon */}
               <svg className="w-5 h-5 text-white shrink-0 mr-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -138,18 +138,17 @@ const Home: React.FC = () => {
               
               <div className="flex-1 relative flex items-center h-full">
                 <span className="text-base md:text-lg text-white font-light tracking-tight">
-                  {displayText}
-                  <span className="inline-block w-[1.5px] h-5 bg-emerald-500 ml-1 animate-pulse align-middle"></span>
+                  Strategy Lab is currently in development...
                 </span>
                 <div className="absolute inset-0 z-10"></div>
               </div>
 
               {/* Round Green Button with White Right Arrow */}
-              <button className="bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-white hover:text-emerald-600 transition-all ml-4 shrink-0 shadow-lg group-hover:scale-105 active:scale-95 pointer-events-none">
+              <div className="bg-emerald-600/30 text-white/30 w-10 h-10 rounded-full flex items-center justify-center transition-all ml-4 shrink-0 shadow-lg">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
-              </button>
+              </div>
             </div>
             
             <p className="text-slate-500 text-[10px] text-center mt-6 tracking-[0.3em] uppercase opacity-60">
@@ -166,7 +165,7 @@ const Home: React.FC = () => {
             <h2 className="text-4xl font-bold text-black uppercase tracking-tight">Our Core Specialties</h2>
             <p className="text-slate-600 text-lg">Bespoke solutions designed for modern enterprise scaling and innovation.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 items-stretch">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
             {SERVICES.map((service) => (
               <div key={service.id} className="flex flex-col p-10 rounded-3xl border border-slate-200 bg-white hover:border-emerald-500 hover:shadow-xl transition-all duration-300">
                 <h3 className="text-xl font-bold mb-4 text-black">{service.title}</h3>

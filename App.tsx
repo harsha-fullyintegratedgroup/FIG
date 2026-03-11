@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import MSMEConsulting from './pages/services/MSMEConsulting';
 import GTMStrategy from './pages/services/GTMStrategy';
 import ProcessConsulting from './pages/services/ProcessConsulting';
+import DigitalSolutions from './pages/services/DigitalSolutions';
 import Contact from './pages/Contact';
 import QuickConsult from './pages/QuickConsult';
 
@@ -33,6 +34,7 @@ const App: React.FC = () => {
             <Route path="/services/msme" element={<MSMEConsulting />} />
             <Route path="/services/gtm" element={<GTMStrategy />} />
             <Route path="/services/process" element={<ProcessConsulting />} />
+            <Route path="/services/digital" element={<DigitalSolutions />} />
             
             {/* Industries */}
             <Route path="/industries/manufacturing" element={<Manufacturing />} />

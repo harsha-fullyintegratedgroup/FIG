@@ -47,6 +47,7 @@ const Navbar: React.FC = () => {
     { name: 'MSME Business Consulting', path: '/services/msme' },
     { name: 'Go-To-Market Strategy', path: '/services/gtm' },
     { name: 'Process Consulting', path: '/services/process' },
+    { name: 'Digital Solutions', path: '/services/digital' },
   ];
 
   const handleIndustryClick = (path: string) => {
@@ -199,16 +200,15 @@ const Navbar: React.FC = () => {
             Contact
           </Link>
 
-          <Link 
-            to="/quick-consult" 
-            className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
+          <div 
+            className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all cursor-not-allowed opacity-70 ${
               isDarkPage 
-                ? 'bg-emerald-600 text-white hover:bg-emerald-500' 
-                : 'bg-black text-white hover:bg-emerald-600'
+                ? 'bg-emerald-600/50 text-white/50' 
+                : 'bg-slate-200 text-slate-500'
             }`}
           >
-            Quick Consult
-          </Link>
+            Coming Soon
+          </div>
         </div>
 
         <button className={`md:hidden p-2 ${getIconColor()}`}>

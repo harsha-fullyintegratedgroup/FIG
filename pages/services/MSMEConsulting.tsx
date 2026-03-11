@@ -6,7 +6,7 @@ const MSMEConsulting: React.FC = () => {
   return (
     <div className="animate-fadeIn">
       {/* Hero Section */}
-      <section className="relative h-[60vh] flex items-center bg-slate-900 text-white px-6 overflow-hidden">
+      <section className="relative h-[70vh] flex items-center bg-slate-900 text-white px-6 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=1600" 
@@ -20,22 +20,26 @@ const MSMEConsulting: React.FC = () => {
           <span className="inline-block bg-emerald-600 text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-6">
             Scale-Up Advisory
           </span>
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight max-w-3xl">
+          <h1 className="text-4xl md:text-7xl font-extrabold mb-6 leading-tight max-w-4xl tracking-tighter uppercase">
             Empowering MSMEs to <br/>
-            <span className="text-emerald-400 text-gradient">Scale Responsibly.</span>
+            <span className="text-emerald-400">Scale Responsibly.</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-300 max-w-2xl leading-relaxed mb-10 font-light">
             We provide specialized strategic guidance for micro, small, and medium enterprises to achieve operational excellence, secure growth capital, and navigate complex regulatory frameworks.
           </p>
-          <Link to="/contact" className="bg-emerald-600 hover:bg-white hover:text-emerald-600 text-white px-8 py-4 rounded-full font-bold transition-all shadow-xl inline-block">
+          <Link to="/contact" className="bg-emerald-600 hover:bg-white hover:text-emerald-600 text-white px-10 py-5 rounded-full font-bold transition-all shadow-2xl inline-block uppercase tracking-wider text-sm">
             Request Scale Audit
           </Link>
         </div>
       </section>
 
-      {/* Features Grid */}
+      {/* Core Specialties Grid */}
       <section className="py-24 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold text-black uppercase tracking-tight mb-4">Core Specialties</h2>
+            <div className="w-20 h-1.5 bg-emerald-600 rounded-full"></div>
+          </div>
           <div className="grid md:grid-cols-3 gap-12">
             {[
               { 
@@ -54,8 +58,8 @@ const MSMEConsulting: React.FC = () => {
                 icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'
               }
             ].map((f) => (
-              <div key={f.title} className="space-y-6">
-                <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center">
+              <div key={f.title} className="group space-y-6 p-8 rounded-3xl border border-slate-100 hover:border-emerald-200 hover:shadow-xl transition-all duration-300">
+                <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                   <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={f.icon} />
                   </svg>
@@ -68,15 +72,19 @@ const MSMEConsulting: React.FC = () => {
         </div>
       </section>
 
-      {/* Detail Section */}
+      {/* Methodology Section */}
       <section className="py-24 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
           <div className="flex-1">
-            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1000" className="rounded-3xl shadow-2xl" alt="Collaboration" />
+            <img 
+              src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1000" 
+              className="rounded-[40px] shadow-2xl" 
+              alt="Collaboration" 
+            />
           </div>
           <div className="flex-1 space-y-8">
-            <h2 className="text-4xl font-bold text-black tracking-tight">Strategy for the Modern Enterprise.</h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
+            <h2 className="text-4xl md:text-5xl font-bold text-black tracking-tight leading-tight uppercase">Strategy for the <br/>Modern Enterprise.</h2>
+            <p className="text-lg text-slate-600 leading-relaxed font-light">
               Fully Integrated Group specializes in bridging the gap between small business agility and corporate-grade strategic rigor. Our MSME wing is dedicated to removing the "glass ceiling" that prevents local winners from becoming global leaders.
             </p>
             <ul className="space-y-4">
@@ -96,6 +104,19 @@ const MSMEConsulting: React.FC = () => {
                 </li>
               ))}
             </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Bottom CTA */}
+      <section className="py-24 px-6 bg-black text-white text-center">
+        <div className="max-w-4xl mx-auto space-y-10">
+          <h2 className="text-3xl md:text-5xl font-bold leading-tight uppercase tracking-tight">Ready to unlock your <br/><span className="text-emerald-500">Growth Potential?</span></h2>
+          <p className="text-slate-400 text-lg max-w-2xl mx-auto">Our typical MSME engagement results in a significant increase in operational throughput and capital readiness within the first 6 months.</p>
+          <div className="pt-6">
+            <Link to="/contact" className="bg-emerald-600 hover:bg-white hover:text-emerald-600 text-white px-12 py-5 rounded-full font-bold transition-all shadow-xl inline-block uppercase tracking-widest text-sm">
+              Schedule Your Audit
+            </Link>
           </div>
         </div>
       </section>
