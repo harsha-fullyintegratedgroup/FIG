@@ -158,6 +158,7 @@ const Contact: React.FC = () => {
                   <option>MSME Business Consulting</option>
                   <option>Go-To-Market Strategy</option>
                   <option>Process Consultation</option>
+                  <option>Digital Solutions</option>
                 </select>
 
                 <textarea
