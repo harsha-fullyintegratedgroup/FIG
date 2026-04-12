@@ -78,8 +78,12 @@ const Navbar: React.FC = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${getNavBackground()}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <Link to="/" className={`text-2xl font-bold tracking-tight uppercase shrink-0 transition-colors ${getLogoColor()}`}>
-          FULLY <span className="text-emerald-600">Integrated</span> Group
+        <Link to="/">
+          <img
+            src="/FIG_MAIN_LOGO.png"
+            alt="Fully Integrated Group"
+            className="h-10 w-auto"
+          />
         </Link>
         
         <div className="hidden md:flex space-x-8 items-center">
