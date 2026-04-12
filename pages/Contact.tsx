@@ -182,6 +182,16 @@ const Contact: React.FC = () => {
                 >
                   {loading ? "Sending..." : "Send Inquiry"}
                 </button>
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => {
+                    window.open("https://wa.me/7033438666", "_blank");
+                  }}
+                  className="w-full bg-emerald-700 text-white font-bold py-4 rounded-xl hover:bg-black disabled:opacity-50"
+                >
+                  {loading ? "Opening..." : "Contact on Whatsapp"}
+                </button>
               </form>
             )}
           </div>
