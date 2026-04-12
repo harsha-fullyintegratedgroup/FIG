@@ -84,7 +84,7 @@ const Navbar: React.FC = () => {
           <img
             src={logo}
             alt="Fully Integrated Group"
-            className="h-10 w-auto"
+            className="h-15 w-auto"
           />
         </Link>
         
