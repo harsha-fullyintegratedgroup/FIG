@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { INDUSTRIES } from '../constants';
+import logo from "/logo/mainlogo.png";
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -75,14 +76,15 @@ const Navbar: React.FC = () => {
   const getLogoColor = () => (isDarkPage ? 'text-white' : 'text-black');
   const getIconColor = () => (isDarkPage ? 'text-white' : 'text-black');
 
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${getNavBackground()}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <Link to="/">
           <img
-            src="/LOGO/FIG_MAIN_LOGO.png"
+            src={logo}
             alt="Fully Integrated Group"
-            className="h-auto w-auto"
+            className="h-10 w-auto"
           />
         </Link>
         
