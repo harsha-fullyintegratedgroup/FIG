@@ -80,9 +80,8 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <Link to="/">
           <img
-            src="/LOGO/FIG_MAIN_LOGO.png"
+            src="/logo/mainlogo.png"
             alt="Fully Integrated Group"
-            className="h-auto w-auto"
           />
         </Link>
         
