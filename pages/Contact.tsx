@@ -76,7 +76,6 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-black mb-1">Call Us</h3>
-                  <p className="text-slate-600 font-medium">+91 703 3438 666</p>
                   <p className="text-slate-600 font-medium">+91 877 8731 073</p>
                 </div>
               </div>
