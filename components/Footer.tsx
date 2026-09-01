@@ -33,7 +33,6 @@ const Footer: React.FC = () => {
           <h3 className="text-white font-semibold mb-6">Contact</h3>
           <ul className="space-y-4 text-sm">
             <li>info@fullyintegratedgroup.com</li>
-            <li>+91 703 3438 666</li>
             <li>+91 877 8731 073</li>
           </ul>
         </div>
